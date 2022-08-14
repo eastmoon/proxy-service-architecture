@@ -145,20 +145,17 @@ goto end
 :cli-dev (
     @rem build docker image
     cd %CLI_DIRECTORY%
-    copy .\nodejs\package.json .\conf\docker\nodejs
     docker build --rm -t js-dev:%PROJECT_NAME% .\conf\docker\nodejs
-    del .\conf\docker\nodejs\package.json
 
     @rem create cache
-    IF NOT EXIST cache (
-        mkdir cache
+    IF NOT EXIST cache\nodejs (
+        mkdir cache\nodejs
     )
 
     echo ^> Startup docker container instance and execute crawler
     docker run -ti --rm^
-        -v %cd%\cache:/data ^
-        -v %cd%\nodejs\test:/app/test ^
-        -v %cd%\nodejs\src:/app/src ^
+        -v %cd%\cache\nodejs:/app/node_modules ^
+        -v %cd%\nodejs:/app ^
         js-dev:%PROJECT_NAME% bash
     goto end
 )
