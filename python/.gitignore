@@ -1,0 +1,4 @@
+# third-party library
+*.pyc
+
+# install library lock file
