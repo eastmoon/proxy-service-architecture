@@ -145,7 +145,7 @@ goto end
 :cli-dev (
     @rem build docker image
     cd %CLI_DIRECTORY%
-    copy .\python\src\.dependencies .\conf\docker\python
+    copy .\python\.dependencies .\conf\docker\python
     docker build --rm -t py-dev:%PROJECT_NAME% .\conf\docker\python
     del .\conf\docker\python\.dependencies
 
