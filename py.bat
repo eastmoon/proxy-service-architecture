@@ -150,13 +150,13 @@ goto end
     del .\conf\docker\python\.dependencies
 
     @rem create cache
-    IF NOT EXIST cache (
-        mkdir cache
+    IF NOT EXIST cache\python (
+        mkdir cache\python
     )
 
     echo ^> Startup docker container instance and execute crawler
     docker run -ti --rm^
-        -v %cd%\cache:/data ^
+        -v %cd%\cache\python:/data ^
         -v %cd%\python\test:/test/ ^
         -v %cd%\python\src:/test/lib ^
         -w "/test" ^
