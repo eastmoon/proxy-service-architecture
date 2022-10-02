@@ -43,10 +43,12 @@ CustomService extends Service {
 CustomCallback extends Callback {
     // Service remote success
     success($response = null) {
+        // do something ...
         return $response;
     }
     // Servcie remote fail
     fail($error = null) {
+        // do something ...
         throw $error;
     }
 }
