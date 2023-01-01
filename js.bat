@@ -154,7 +154,8 @@ goto end
 
     echo ^> Startup docker container instance and execute crawler
     docker run -ti --rm^
-        -v %cd%\cache\nodejs:/app/node_modules ^
+        -v %cd%\cache\nodejs\modules:/app/node_modules ^
+        -v %cd%\cache\nodejs\report:/app/report ^
         -v %cd%\nodejs:/app ^
         js-dev:%PROJECT_NAME% bash
     goto end
