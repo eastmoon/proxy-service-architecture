@@ -1,7 +1,5 @@
-'use strict';
-
-import $ from 'jquery';
-import RSVP from "rsvp";
+// Library
+import Axios from "axios";
 
 class Ajax {
     // Builder method
@@ -25,24 +23,6 @@ class Ajax {
     static getXml($args = {}) {
         return instance.get($args).xml($args).build($args);
     }
-    // Encryption method : RSA
-    static encryptRSA($args = {}) {
-        /*
-      // RSA encryption for Authorization DES key.
-      // if method is POST, PUT, and have data need to send, it will encryption.
-      if (("POST" === argt.type || "PUT" === argt.type) && argt.data && argt.encrypt && Authorization.getAuthorization()) {
-          let clientKey = Authorization.genDESKey();
-          argt.data = Authorization.encryptByDES(argt.data.split(' ').join(''), clientKey);
-          argt['headers'] = {
-              "Encryption": Authorization.RSAEncrypt(clientKey)
-          };
-      }*/
-        $args['headers'] = {
-            "Encryption": 'xxxx-yyyy-zzzz'
-        }
-        return $args;
-    }
-
     // Constructor
     constructor() {
         // Singleton pattern
