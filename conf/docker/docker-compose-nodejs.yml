@@ -22,7 +22,7 @@ services:
       - 3000:3000
     networks:
       - request-service-arch
-    command: ["json-server", " -H", "0.0.0.0 db.json"]
+    command: ["json-server", "-H", "0.0.0.0", "db.json"]
 
 networks:
   request-service-arch:
