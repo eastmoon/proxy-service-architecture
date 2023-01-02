@@ -1,0 +1,29 @@
+# Docker-Compose document
+# Ref : https://docs.docker.com/compose/compose-file/
+
+version: "3.9"
+services:
+  nodejs:
+    image: js-dev:${TAG}
+    container_name: nodejs_${TAG}
+    volumes:
+      - ${CLI_DIRECTORY}\cache\nodejs\modules:/app/node_modules
+      - ${CLI_DIRECTORY}\cache\nodejs\report:/app/report
+      - ${CLI_DIRECTORY}\nodejs:/app
+    networks:
+      - request-service-arch
+    working_dir: "/app"
+    command: ["tail", "-f", "/dev/null"]
+
+  json-server:
+    image: json-server:${TAG}
+    container_name: json-service_${TAG}
+    ports:
+      - 3000:3000
+    networks:
+      - request-service-arch
+    command: ["json-server", " -H", "0.0.0.0 db.json"]
+
+networks:
+  request-service-arch:
+    driver: bridge

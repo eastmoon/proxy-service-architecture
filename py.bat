@@ -140,27 +140,41 @@ goto end
 
 :: ------------------- Common Command method -------------------
 
-:: ------------------- Command "dev" method -------------------
-
-:cli-dev (
-    @rem build docker image
+:cli-create-docker-image (
+    @rem back to command-line-interface directory
     cd %CLI_DIRECTORY%
-    copy .\python\.dependencies .\conf\docker\python
-    docker build --rm -t py-dev:%PROJECT_NAME% .\conf\docker\python
-    del .\conf\docker\python\.dependencies
 
-    @rem create cache
+    echo ^> Create cache
     IF NOT EXIST cache\python (
         mkdir cache\python
     )
 
-    echo ^> Startup docker container instance and execute crawler
-    docker run -ti --rm^
-        -v %cd%\cache\python:/data ^
-        -v %cd%\python\test:/test/ ^
-        -v %cd%\python\src:/test/lib ^
-        -w "/test" ^
-        py-dev:%PROJECT_NAME% bash
+    echo ^> Create .env for compose
+    echo Current Environment %PROJECT_ENV%
+    echo TAG=%PROJECT_NAME% > .\cache\python\.env
+    echo CLI_DIRECTORY=%CLI_DIRECTORY% >> .\cache\python\.env
+
+    echo ^> Build docker images
+    copy .\python\.dependencies .\conf\docker\python
+    docker build --rm -t py-dev:%PROJECT_NAME% .\conf\docker\python
+    del .\conf\docker\python\.dependencies
+    docker build --rm -t json-server:%PROJECT_NAME% .\conf\docker\json-server
+
+    goto end
+)
+
+:: ------------------- Command "dev" method -------------------
+
+:cli-dev (
+    echo ^> Prepare for execute
+    call :cli-create-docker-image
+
+    echo ^> Startup docker container instance and into develop mode
+    docker-compose -f .\conf\docker\docker-compose-python.yml --env-file ".\cache\python\.env" up -d
+    docker exec -ti python_%PROJECT_NAME% bash
+
+    echo ^> Close down docker container instance
+    docker-compose -f .\conf\docker\docker-compose-python.yml --env-file ".\cache\python\.env" down
     goto end
 )
 

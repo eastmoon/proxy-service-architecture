@@ -140,24 +140,40 @@ goto end
 
 :: ------------------- Common Command method -------------------
 
-:: ------------------- Command "dev" method -------------------
-
-:cli-dev (
-    @rem build docker image
+:cli-create-docker-image (
+    @rem back to command-line-interface directory
     cd %CLI_DIRECTORY%
-    docker build --rm -t js-dev:%PROJECT_NAME% .\conf\docker\nodejs
 
-    @rem create cache
+    echo ^> Create cache
     IF NOT EXIST cache\nodejs (
         mkdir cache\nodejs
     )
 
-    echo ^> Startup docker container instance and execute crawler
-    docker run -ti --rm^
-        -v %cd%\cache\nodejs\modules:/app/node_modules ^
-        -v %cd%\cache\nodejs\report:/app/report ^
-        -v %cd%\nodejs:/app ^
-        js-dev:%PROJECT_NAME% bash
+    echo ^> Create .env for compose
+    echo Current Environment %PROJECT_ENV%
+    echo TAG=%PROJECT_NAME% > .\cache\nodejs\.env
+    echo CLI_DIRECTORY=%CLI_DIRECTORY% >> .\cache\nodejs\.env
+
+    echo ^> Build docker images
+    docker build --rm -t js-dev:%PROJECT_NAME% .\conf\docker\nodejs
+    docker build --rm -t json-server:%PROJECT_NAME% .\conf\docker\json-server
+
+    goto end
+)
+
+:: ------------------- Command "dev" method -------------------
+
+:cli-dev (
+    echo ^> Prepare for execute
+    call :cli-create-docker-image
+
+    echo ^> Startup docker container instance and into develop mode
+    docker-compose -f .\conf\docker\docker-compose-nodejs.yml --env-file ".\cache\nodejs\.env" up -d
+    docker exec -ti nodejs_%PROJECT_NAME% bash -l -c "npm install"
+    docker exec -ti nodejs_%PROJECT_NAME% bash
+    
+    echo ^> Close down docker container instance
+    docker-compose -f .\conf\docker\docker-compose-nodejs.yml --env-file ".\cache\nodejs\.env" down
     goto end
 )
 
