@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "demo code",
   "scripts": {
-    "test": "babel-node conf/project.conf.js"
+    "test": "export NODE_PATH=/app/src && babel-node conf/project.conf.js"
   },
   "babel": {
     "presets": [
