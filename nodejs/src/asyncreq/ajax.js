@@ -53,51 +53,35 @@ class Ajax {
     // HTTP Methods : GET
     get($args) {
         // GET setting
-        $args.type = "GET";
-        // It will force requested pages not to be cached by the browser.
-        // The parameter is not needed for other types of requests, except in IE8 when a POST is made to a URL that has already been requested by a GET.
-        // 處理 IE 暫存 GET 不發的問題
-        if ($args.cache !== 'boolean')
-            $args.cache = false;
-
+        $args.method = "get";
         //
         return this;
     }
     // HTTP Methods : POST
     post($args) {
         // POST setting
-        $args.type = "POST";
-        //
-        if ($args.data != null && typeof $args.data == 'object')
-            $args.data = JSON.stringify($args.data);
-
+        $args.method = "post";
         //
         return this;
     }
     // HTTP Methods : PUT
     put($args) {
         // DELETE setting
-        $args.type = "PUT";
+        $args.method = "put";
         //
         return this;
     }
     // HTTP Methods : DELETE
     delete($args) {
         // DELETE setting
-        $args.type = "DELETE";
+        $args.method = "delete";
         //
         return this;
     }
 
     // Create RSVP Object for connection.
     build($args) {
-        let promise = new RSVP.Promise(($resolve, $reject) => {
-            $.ajax($args).done((result) => {
-                $resolve(result);
-            }).fail((result) => {
-                $reject(result);
-            });
-        });
+        let promise = new Axios($args);
         promise._ajaxArgs = $args;
         return promise;
     }

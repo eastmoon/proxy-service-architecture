@@ -1,6 +1,5 @@
 'use strict';
 
-import RSVP from "rsvp";
 import Ajax from './ajax';
 
 class Service {
