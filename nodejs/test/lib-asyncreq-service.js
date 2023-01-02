@@ -33,7 +33,7 @@ describe('contract testing with service', function() {
 
     it("Service : call api with request body", () => {
         // Declare service object with base url.
-        const service = new CustomService("http://json-server:3000/");
+        const service = new CustomService("http://json-server:3000");
         // Call service.
         return service.api(1)
             .then((response) => {

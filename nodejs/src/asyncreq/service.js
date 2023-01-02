@@ -22,7 +22,14 @@ class Service {
                 let promise = null;
                 //
                 if (this._url !== "") {
-                    args.url = this._url + args.url;
+                    if(this._url.slice(-1) === "/" && args.url.slice(0, 1) === "/") {
+                        args.url = this._url.slice(0, -1) + args.url;
+                    }
+                    else if(this._url.slice(-1) === "/" || args.url.slice(0, 1) === "/") {
+                        args.url = this._url + args.url;
+                    } else {
+                        args.url = this._url + "/" + args.url;
+                    }
                 }
                 //
                 if (args.type != null && Ajax[args.type] != null) {
